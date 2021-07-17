@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>jeopardy-ish</title>
+        <style>
+            .gridContainer {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+                grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+                padding-left: 10px;
+            }
+
+            .box {
+                /* float:left; */
+                position: relative;
+                /* width: 30%; */
+                padding-top: 15%;
+                padding-bottom: 15%;
+                /* padding-bottom : 30%; = width for a 1:1 aspect ratio */
+                
+                background-color:#30475e;
+                /* overflow:hidden; */
+                text-align: center;
+                margin:1.66%;
+                color: white;
+            }
+
+            .greyBox {
+                background-color: #e8e8e8;
+            }
+
+            .level {
+                background-color: #f05454;
+                color: white;
+            }
+            .catagory {
+                background-color: #f05454;
+                color: white;
+            }
+            .oneXone {
+                background-color: #222831;
+                color: white;
+            }
+
+            .cardDescription {
+                color: white;
+                font-size: xx-large;
+                position: relative;
+                padding-top: 15%;
+                padding-bottom: 15%;
+                background-color:#30475e;
+                text-align: center;
+                margin:1.66%;
+                color: white;
+            }
+
+            .versionButtonContainer {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+                margin: 1.66%;
+            }
+
+            .versionButton {
+                margin: 1.66%;
+            }
+        </style>
+    </head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <div class="gridContainer">
+            <div id="1x1" class="box oneXone">Jeopardy-ish</div>
+
+            <div id="1x2" class="box catagory">Catagory One</div>
+            <div id="1x3" class="box catagory">Catagory Two</div>
+            <div id="1x4" class="box catagory">Catagory Three</div>
+            <div id="1x5" class="box catagory">Catagory Four</div>
+
+            <div id="2x1" class="box level">Three Sips</div>
+            <div id="2x2" class="box">Card</div>
+            <div id="2x3" class="box">Card</div>
+            <div id="2x4" class="box">Card</div>
+            <div id="2x5" class="box">Card</div>
+
+            <div id="3x1" class="box level">Four Sips</div>
+            <div id="3x2" class="box">Card</div>
+            <div id="3x3" class="box">Card</div>
+            <div id="3x4" class="box">Card</div>
+            <div id="3x5" class="box">Card</div>
+
+            <div id="4x1" class="box level">Shot</div>
+            <div id="4x2" class="box" >Card</div>
+            <div id="4x3" class="box">Card</div>
+            <div id="4x4" class="box">Card</div>
+            <div id="4x5" class="box">Card</div>
+
+            <div id="5x1" class="box level">Shotgun</div>
+            <div id="5x2" class="box">Card</div>
+            <div id="5x3" class="box">Card</div>
+            <div id="5x4" class="box">Card</div>
+            <div id="5x5" class="box">Card</div>
+        </div>
+        <div id="cardDescription" class="cardDescription">Select a version to begin!</div>
+        <div class="versionButtonContainer">
+            <button id="v1" class="versionButton" onclick="versionClicked('forAll')">Version: For all</button>
+            <!-- <button id="v2" class="versionButton" onclick="versionClicked('forCouples')">Version: For couples</button> -->
+            <button id="v3" class="versionButton" onclick="versionClicked('forOldFriendGroups')">Version: For old friend groups</button>
+
+            <!-- <button id="v4" class="versionButton">V4 coming soon</button>
+            <button id="v5" class="versionButton">V5 coming soon</button>
+            <button id="v6" class="versionButton">V6 coming soon</button> -->
+        </div>
+    <body>
+
+    </body>
+
+
+    <script>
+
+        //thingsToImprove create a restart button that resets the card titles to blank, turns the card color back to dark blue, and sets the versionID back to nothing, and makes sure the card descriptions are emply and rest to non of them counted as clicked.
+
+        var versionId = "noVersion"
+
+        var boxNumberAlreadyClicked = [26]
+
+        var cardDescription = document.getElementById("cardDescription")
+
+        var catagory1Ele = document.getElementById("1x2")
+        var catagory2Ele = document.getElementById("1x3")
+        var catagory3Ele = document.getElementById("1x4")
+        var catagory4Ele = document.getElementById("1x5")
+
+        var level1Catagory1Ele = document.getElementById("2x2")
+        var level2Catagory1Ele = document.getElementById("3x2")
+        var level3Catagory1Ele = document.getElementById("4x2")
+        var level4Catagory1Ele = document.getElementById("5x2")
+
+        var level1Catagory2Ele = document.getElementById("2x3")
+        var level2Catagory2Ele = document.getElementById("3x3")
+        var level3Catagory2Ele = document.getElementById("4x3")
+        var level4Catagory2Ele = document.getElementById("5x3")
+
+        var level1Catagory3Ele = document.getElementById("2x4")
+        var level2Catagory3Ele = document.getElementById("3x4")
+        var level3Catagory3Ele = document.getElementById("4x4")
+        var level4Catagory3Ele = document.getElementById("5x4")
+
+        var level1Catagory4Ele = document.getElementById("2x5")
+        var level2Catagory4Ele = document.getElementById("3x5")
+        var level3Catagory4Ele = document.getElementById("4x5")
+        var level4Catagory4Ele = document.getElementById("5x5")
+
+        
+        $('.gridContainer').find('div').click( function(){
+            var boxNumber = ($(this).index()+1)
+
+            if (boxNumberAlreadyClicked.includes(boxNumber)) {
+                cardDescription.innerHTML = "Card already played. Please pick a different card."
+            } else {
+                changeCardDescription(boxNumber)
+                // changeCardColor(boxNumber)
+            }
+        })
+
+        // When adding a new version copy paste another block of an else if statement and change the version#
+        //thingToImprove figure out how to pass a paramater from the onclick funciton to make the version# variable depeding on the version clicked.
+        function changeCardDescription(boxNumber) {
+            if (versionId == "forAll") {
+                var description = gameContent.version1[boxNumber][Math.floor(Math.random() * gameContent.version1[boxNumber].length)]
+                cardDescription.innerHTML = "Your card: " + description
+                boxNumberAlreadyClicked.push(boxNumber)
+            } else if (versionId == "forCouples") {
+                var description = gameContent.version2[boxNumber][Math.floor(Math.random() * gameContent.version2[boxNumber].length)]
+                cardDescription.innerHTML = "Your card: " + description
+                boxNumberAlreadyClicked.push(boxNumber)
+            } else if (versionId == "forOldFriendGroups") {
+                var description = gameContent.version3[boxNumber][Math.floor(Math.random() * gameContent.version3[boxNumber].length)]
+                cardDescription.innerHTML = "Your card: " + description
+                boxNumberAlreadyClicked.push(boxNumber)
+            } else {
+                cardDescription.innerHTML = "Wanna play? Click a version button below to start!"
+                console.log("noVersion Selected")
+            }
+        }
+
+        //Gray out box (3/3)
+        function onOver(node){
+            node.className = node.className + (' greyBox');
+        }
+
+        //Gray out box (2/3)
+        function connect(node,event,fnc){
+            if(node.addEventListener){
+                node.addEventListener(event.substring(2,event.length),function(){
+                    fnc(node);
+                },false);
+            }else if(node.attachEvent){
+                node.attachEvent(event,function(){
+                    fnc(node);
+                });
+            }
+        }
+
+        //Gray out box (1/3)
+        var divs = document.getElementsByTagName("div");
+        for(var i=0,div;div =divs[i];i++){
+            if(div.className.match('box')){
+                connect(div,'onclick',onOver);
+                // connect(div,'onclick',onOut);
+            }
+        }
+
+        function addMyClass() {
+            var classString = this.className; // returns the string of all the classes for myDiv
+            var newClass = classString.concat("greyBox"); // Adds the class "main__section" to the string (notice the leading space)
+            this.className = newClass; // sets className to the new string
+        }
+
+        function versionClicked(selectedVersionId) {
+
+            console.log(selectedVersionId)
+
+            versionId = selectedVersionId
+
+
+            //thingToImprove figure out how to pass a paramater from the onclick funciton to make the version# variable depeding on the version clicked.
+            // Update catagory names based on version clicked
+            if (selectedVersionId === "forAll") {
+                catagory1Ele.innerHTML = gameContent.version1[2]
+                catagory2Ele.innerHTML = gameContent.version1[3]
+                catagory3Ele.innerHTML = gameContent.version1[4]
+                catagory4Ele.innerHTML = gameContent.version1[5]
+                cardDescription.innerHTML = versionId
+
+            } else if (selectedVersionId === "forCouples") {
+                catagory1Ele.innerHTML = gameContent.version2[2]
+                catagory2Ele.innerHTML = gameContent.version2[3]
+                catagory3Ele.innerHTML = gameContent.version2[4]
+                catagory4Ele.innerHTML = gameContent.version2[5]
+                cardDescription.innerHTML = versionId
+
+            } else if (selectedVersionId === "forOldFriendGroups") {
+                catagory1Ele.innerHTML = gameContent.version3[2]
+                catagory2Ele.innerHTML = gameContent.version3[3]
+                catagory3Ele.innerHTML = gameContent.version3[4]
+                catagory4Ele.innerHTML = gameContent.version3[5]
+                cardDescription.innerHTML = versionId
+
+            } else {
+                console.log("error: version key not selected")
+            }
+            
+
+
+            // Adding card names
+            level1Catagory1Ele.innerHTML = selectedVersionId
+            level2Catagory1Ele.innerHTML = selectedVersionId
+            level3Catagory1Ele.innerHTML = selectedVersionId
+            level4Catagory1Ele.innerHTML = selectedVersionId
+
+            level1Catagory2Ele.innerHTML = selectedVersionId
+            level2Catagory2Ele.innerHTML = selectedVersionId
+            level3Catagory2Ele.innerHTML = selectedVersionId
+            level4Catagory2Ele.innerHTML = selectedVersionId
+
+            level1Catagory3Ele.innerHTML = selectedVersionId
+            level2Catagory3Ele.innerHTML = selectedVersionId
+            level3Catagory3Ele.innerHTML = selectedVersionId
+            level4Catagory3Ele.innerHTML = selectedVersionId
+
+            level1Catagory4Ele.innerHTML = selectedVersionId
+            level2Catagory4Ele.innerHTML = selectedVersionId
+            level3Catagory4Ele.innerHTML = selectedVersionId
+            level4Catagory4Ele.innerHTML = selectedVersionId
+        }
+
+
+        var gameContent = {
+            version1: {
+                1: "forAll",
+                2: ["Experience"],
+                3: ["Drinking"],
+                4: ["Acting Dumb"],
+                5: ["Knowledge"],
+                6: ["What'd you click me for? I'm a level not a card. Take a sip of your drink dum-dum :)"], //Level
+                7: ["Weirdest place you’ve had sex?","Describe the worst and best head?","Best and worst place you’ve had sex?","What’s the weirdest thing a girl has said to you during sex?"], // Catagory 1
+                8: ["Give and take a sip with the person who has the closest birthday to you.", "Make a rule but everytime some breaks your rule you must drink."], // Catagory 2
+                9: ["Give the guy to the right of you $1","Pushup challenge someone from the room (loser taker a shot)"], // Catagory 3
+                10: ["Who’s the oldest and youngest in the room?"], // Catagory 4
+                11: ["you sily goose that's a level not a card. Take a shot for being so silly :)"], //Level
+                12: ["Name your fetish?","Cringiest thing you have done/said during sex","What’s your weirdest sexual fantasy?"], // Catagory 1
+                13: ["Create two cocktails. Drink one. Share one.", "Kneel down and open your mouth for 5 secs and drink hard liquor", "Spin a bottle to select who finishes their drink"],
+                14: ["Scream a selected word by the group","Receive wet willy"],
+                15: ["Guess two body count right in the room", "Guess the person who’s has/had the longest relationship"],
+                16: ["Who dare pick me over a card. For now you must take a shot and give a shot :)"], //Level
+                17: ["FMK in the room"], // Catagory 1
+                18: ["Rock paper scissors, loser takes a shot", "Wheelbarrow shotgun"],
+                19: ["Suck on someone’s nipple", "Text current crush risky message", "Send nude", "Text estranged friend 'I love you'","Receive a wedgie for 3 seconds from a chosen person"],
+                20: ["Guess the person who’s has/had the longest relationship"],
+                21: ["YO Num-nuts! I ain't a card. Pick something else :/"], //Level
+                22: ["Describe how you would have sex with a person in this room?"], // Catagory 1
+                23: ["Shotgun in 15 secs", "Butt chug 3 secs"],
+                24: ["Naked lap", "Call your mom", "Booblooge off someone in the room", "Receive a nipple twist from someone in the room", "Call your ex on speaker"],
+                25: ["Name all of the people in the room who have cheated on someone"]
+            },
+
+            version2: {
+                1: "forCouples",
+                2: ["Partner Knowledge"],
+                3: ["Drinking"],
+                4: ["Acting Dumb"],
+                5: ["Group Knowledge"],
+
+                6: ["What'd you click me for? I'm a level not a card. Take a sip of your drink dum-dum :)"], //Level 1 catagories
+                7: ["What is your partner's favorite color? Both people write it down and on the count of three share and see if it matches", "What’s your partner’s favorite color combination? Both people write it down and on the count of three share and see if it matches" ],
+                8: ["Give and take a sip with the person who has the closest birthday to you.", "Make a rule but everytime some breaks your rule you must drink."],
+                9: ["Give your partner $1"],
+                10: ["Who’s the oldest and youngest in the room?"],
+
+                11: ["you sily goose that's a level not a card. Take a shot for being so silly :)"], //Level 2 catagories
+                12: ["Does your partner have any fetish, yes or no? Both people write it down and on the count of three share and see if it matches", "What’s your partner’s zodiac sign (eg. Virgo)? Both people write it down and on the count of three share and see if it matches"],
+                13: ["Create four cocktails. 2 for you and your partner. 2 for another set of partners.", "Kneel down and open your mouth for 5 secs and drink hard liquor", "Spin a bottle to select the partners who will finish their drink"],
+                14: ["Receive wet willies from two other partners.", "Partner 2 truths and a lie. The rest of the partners in the game guess. If the lie is not guessed the partners who created the lie pass out 2 shots."],
+                15: ["Guess the person who’s has/had the longest relationship"],
+
+
+                // let off here need to make the changes below
+                16: ["Who dare pick me over a card. For now you must take a shot and give a shot :)"], //Level 3 catagories
+                17: ["What’s your partner’s birthday? Both people write it down and on the count of three share and see if it matches.", "Partner’s dream job? Both people write it down and on the count of three share and see if it matches."],
+                18: ["Rock paper scissors your partner. Losing partner takes a shot.", "Buy your partner a drink if you go out (expires the night at 12:30 AM). In the meantime take a half shot."],
+                19: ["Partners body seltzer roll. Losing partners take a shot.", "Patty cake with your partner against another pair of partners. First one to go 6 cycles without messing up wins. Losing team takes 2 shots for the level."],
+                20: ["Guess the person who’s has/had the longest relationship (doesn’t have to be the one they are or aren't in)"],
+
+                21: ["YO Num-nuts! I ain't a card. Pick something else :/"], //Level 4 catagories
+                22: ["What is your partners bucket list spot to have sex? Both people write it down and on the count of three share and see if it matches."], 
+                23: ["Shotgun in 8 secs.", "Butt chug 3 secs or give your partner a 3 sec kiss (your welcome)"],
+                24: ["Call either of your parents on speaker"],
+                25: ["Couple most likely to disappear during the pregame for **nknown** reasons. Group vote to decide if it’s accurate"]
+            },
+
+            version3: {
+                1: "forOldFriendGroups",
+                2: ["Drinking"],
+                3: ["Be A Freshman"],
+                4: ["Blast From The Past"],
+                5: ["Let's Assume"],
+
+                6: ["What'd you click me for? I'm a level not a card. Take a sip of your drink dum-dum :)"], //Level 1 catagories
+                7: ["Give and take a sip with the person who has the closest birthday to you.", "Make a rule but everytime some breaks your rule you must drink."],
+                8: ["Take off the heaviest piece of clothing you are wearing."],
+                9: ["Name and share a picture of your most objectively, attractive relative (this card was created by Sarah Nicholls)"],
+                10: ["Go around and for each person guess the max age they would be willing to hook up with.", "Guess the age of when each person in the room had the their first kiss."],
+
+                11: ["you sily goose that's a level not a card. Take a shot for being so silly :)"], //Level 2 catagories
+                12: ["Let the third person to your right make you a drink you must finish."],
+                13: ["Pick the person you know least in the group and hold hands while staring into each other’s desirable eyes for 30 secs… or more :) (Everyone in the room please be quiet while they gaze into each others eyes).", "Take a sip for every time you have broken parietals."],
+                14: ["FMK based on three chosen people within the room by the group.", "Take a sip for each person you have hooked up (first base or farther) with in the room."],
+                15: ["Guess everyone’s body count in the room."],
+
+
+                // let off here need to make the changes below
+                16: ["Who dare pick me over a card. For now you must take a shot and give a shot :)"], //Level 3 catagories
+                17: ["Pick a person. Both of you finish your drinks.", "Rock paper scissor with the entire group at the same time. Take a sip for every person who beats you."],
+                18: ["7 mins in heaven but the group gets to decided who will join you."],
+                19: ["Describe the worst sexual experince you’ve had with someone in the room (Don’t say their name out loud)."], 
+                20: ["Guess the age of when each person in the room lost their virginity.", "Guess everyone’s rice purity score."],
+
+                21: ["YO Num-nuts! I ain't a card. Pick something else :/"], //Level 4 catagories
+                22: ["Take a belly shot off of someone that the group gets to pick.", "Baby bird a shot out of the mouth of the person four people to the right of you.", "Full drinks and shirt shackles. Let the group pick a person that you will tie yourself to using a shirt (your shirt or someone from the group) till you both finish a new (aka full) drink."],
+                23: ["Let someone cut a small piece of your hair and tape it to your face as facial hair for the rest of the night."],
+                24: ["Call your parents and ask them for the story of when you were conceived (put on speaker phone)."],
+                25: ["Go around the room and guess for each person who they would be willing to hook up with in the room."],
+            }
+        }
+
+
+        // version#: {
+        //         1: "versionNameTypeHere",
+        //         2: [],
+        //         3: [],
+        //         4: [],
+        //         5: [],
+
+        //         6: ["What'd you click me for? I'm a level not a card. Take a sip of your drink dum-dum :)"], //Level 1 catagories
+        //         7: [],
+        //         8: [],
+        //         9: [],
+        //         10: [],
+
+        //         11: ["you sily goose that's a level not a card. Take a shot for being so silly :)"], //Level 2 catagories
+        //         12: [],
+        //         13: [],
+        //         14: [],
+        //         15: [],
+
+
+        //         // let off here need to make the changes below
+        //         16: ["Who dare pick me over a card. For now you must take a shot and give a shot :)"], //Level 3 catagories
+        //         17: [],
+        //         18: [],
+        //         19: [], 
+        //         20: [],
+
+        //         21: ["YO Num-nuts! I ain't a card. Pick something else :/"], //Level 4 catagories
+        //         22: [],
+        //         23: [],
+        //         24: [],
+        //         25: [],
+        //     }
+
+        
+        
+    </script>
+
+</html>
